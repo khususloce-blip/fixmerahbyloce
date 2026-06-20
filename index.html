@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kirim Laporan WA</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 30px; background-color: #eee; }
+        .kotak { background: white; padding: 20px; border-radius: 10px; max-width: 400px; margin: auto; box-shadow: 0px 0px 10px rgba(0,0,0,0.1); }
+        label { font-weight: bold; display: block; margin-bottom: 5px; }
+        input { width: 100%; padding: 10px; margin-bottom: 15px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 5px; }
+        button { background-color: #25D366; color: white; padding: 12px; width: 100%; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; }
+        button:hover { background-color: #128C7E; }
+    </style>
+</head>
+<body>
+
+<div class="kotak">
+    <h2>Form Laporan WhatsApp</h2>
+    
+    <label>Nama Anda:</label>
+    <input type="text" id="nama" placeholder="Contoh: Masli">
+
+    <label>Nomor Telepon Bermasalah:</label>
+    <input type="text" id="telepon" placeholder="Contoh: +62627727272">
+
+    <button onclick="kirimData()">Kirim Sekarang</button>
+</div>
+
+<script>
+    async function kirimData() {
+        const nama = document.getElementById('nama').value;
+        const telepon = document.getElementById('telepon').value;
+
+        if (!nama || !telepon) {
+            alert('Isi semua kotak terlebih dahulu!');
+            return;
+        }
+
+        try {
+            const respon = await fetch('/api/kirim', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ nama, telepon })
+            });
+
+            const hasil = await respon.json();
+            if (hasil.sukses) {
+                alert('Email pengaduan berhasil dikirim!');
+            } else {
+                alert('Gagal mengirim: ' + hasil.pesan);
+            }
+        } catch (error) {
+            alert('Terjadi kesalahan koneksi ke server.');
+        }
+    }
+</script>
+
+</body>
+</html>
